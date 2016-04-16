@@ -5,7 +5,11 @@ var gulp = require('gulp'),
   path = require('path');
 
 gulp.task('haxe:build', function(done){
-  exec('haxelib run flow build web', done);
+  exec('haxelib run flow build web', function (err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    done(err);
+  });
 });
 
 gulp.task('haxe:watch', ['haxe:build'], function(done){
