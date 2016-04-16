@@ -1,39 +1,47 @@
 import luxe.Input;
 import luxe.Sprite;
 import luxe.Color;
+import luxe.States;
 import luxe.Vector;
 import luxe.Ev;
+import luxe.Log.*;
 import luxe.utils.Random;
 import luxe.utils.Maths;
 import luxe.tween.easing.*;
+import entities.*;
+import states.*;
 
 class Main extends luxe.Game {
 
-    var rand = new Random(0x3389345);
+    public static var rand = new Random(0x3389345);
+    public static var state:States;
 
-    var squares = new Array<Sprite>();
-    var centers = new Array<Vector>();
-    var offsets = new Array<Float>();
-    var mousePos = new Vec();
+    override function config(config:luxe.AppConfig) {
+        config.preload.textures.push({ id:'assets/textures/blob.png' });
+        config.preload.textures.push({ id:'assets/textures/blobback.png' });
+        return config;
+    }
 
     override function ready() {
+        log('READY');
         new FPS();
 
-        for (i in 0 ... 2000) {
-            squares.push(new Sprite({
-                name: 'sprite' + i,
-                pos: Luxe.screen.mid,
-                color: Color.random(),
-                size: new Vec(16, 16),
-            }));
-            centers.push(Luxe.screen.mid + new Vec(rand.get()-0.5, rand.get()-0.5) * 150);
-            offsets.push(rand.get() * 10);
-        }
+        // background
+        var background = new Sprite({
+            name: 'background',
+            color: new Color().rgb(0xe9e9e9),
+            pos: Luxe.screen.mid,
+            size: Luxe.screen.size,
+        });
 
-        app.on(Ev.mousemove, moused);
-        app.on(Ev.mousedown, moused);
-        app.on(Ev.touchmove, touched);
-        app.on(Ev.touchdown, touched);
+        // states
+        state = new States({ name: 'game' });
+
+        state.add(new TitleState({name: 'title'}));
+        state.add(new GameState({name: 'game'}));
+        Luxe.on(Ev.init, function(_) {
+            state.set('title');
+        });
     }
 
     override function onkeyup(e:KeyEvent) {
@@ -42,20 +50,10 @@ class Main extends luxe.Game {
         }
     }
 
-    function moused(e:MouseEvent) {
-        mousePos = new Vec(e.x, e.y);
-    }
-    function touched(e:TouchEvent) {
-        mousePos = new Vec(e.x, e.y) * Luxe.screen.size;
+    override function update(dt:Float) {
     }
 
-    override function update(dt:Float) {
-        for (i in 0 ... squares.length) {
-            var pos = centers[i] + new Vec(Math.cos(Luxe.time + offsets[i]), Math.sin(Luxe.time + offsets[i])) * 200;
-            var distToMouse = (mousePos - pos).length;
-            var amount = 150 + 30 * Math.sin(Luxe.time + offsets[i]);
-            var lerp = Maths.clamp(Math.max(Back.easeInOut.calculate(1 - (distToMouse/amount)), 100/distToMouse), 0, 1);
-            squares[i].pos = pos * (1 - lerp) + mousePos * (lerp);
-        }
+    public static function tex(id:String) {
+        return Luxe.resources.texture('assets/textures/' + id + '.png');
     }
 }
