@@ -1,0 +1,33 @@
+{
+  luxe:{
+    window: {
+      width: 640,
+      height: 640,
+      title:'SlimySquad',
+      fullscreen: false,
+      resizable: false,
+      borderless: false
+    }
+  },
+
+  project : {
+    name : 'SlimySquad',
+    version : '0.0.1',
+    author : 'SlimySquad',
+
+    app : {
+      name : 'slimysquad',
+      package : 'com.foolmoron.SlimySquad'
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+      }
+    },
+
+    files : {
+      assets : 'assets/'
+    }
+  }
+}
