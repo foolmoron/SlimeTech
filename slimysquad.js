@@ -2741,19 +2741,22 @@ components_Dragable.prototype = $extend(luxe_Component.prototype,{
 		this.get_entity()._listen(17,$bind(this,this.onmousedown));
 		this.get_entity()._listen(19,$bind(this,this.onmousemove));
 		this.get_entity()._listen(18,$bind(this,this.onmouseup));
+		this.get_entity()._listen(21,$bind(this,this.ontouchdown));
+		this.get_entity()._listen(23,$bind(this,this.ontouchmove));
+		this.get_entity()._listen(22,$bind(this,this.ontouchup));
 	}
 	,contains: function(x,y) {
 		var dx = Math.abs(x - this.get_pos().x);
 		var dy = Math.abs(y - this.get_pos().y);
 		return dx < this.rectX / 2 && dy < this.rectY / 2;
 	}
-	,onmousedown: function(e) {
-		if(this.contains(e.x,e.y)) {
+	,ondown: function(x,y) {
+		if(this.contains(x,y)) {
 			this.dragging = true;
-			this.prevMousePos = new phoenix_Vector(e.x,e.y,null,null);
+			this.prevMousePos = new phoenix_Vector(x,y,null,null);
 		}
 	}
-	,onmousemove: function(e) {
+	,onmove: function(x,y) {
 		if(this.dragging) {
 			if(this.napeBody != null) {
 				var delta;
@@ -2766,15 +2769,33 @@ components_Dragable.prototype = $extend(luxe_Component.prototype,{
 				this.napeBody.body.get_position().addeq(new nape_geom_Vec2(delta.x,delta.y));
 			} else {
 				var _g = this.get_pos();
-				_g.set_x(_g.x + (e.x - this.prevMousePos.x));
+				_g.set_x(_g.x + (x - this.prevMousePos.x));
 				var _g1 = this.get_pos();
-				_g1.set_y(_g1.y + (e.y - this.prevMousePos.y));
+				_g1.set_y(_g1.y + (y - this.prevMousePos.y));
 			}
-			this.prevMousePos = new phoenix_Vector(e.x,e.y,null,null);
+			this.prevMousePos = new phoenix_Vector(x,y,null,null);
 		}
 	}
-	,onmouseup: function(e) {
+	,onup: function() {
 		this.dragging = false;
+	}
+	,onmousedown: function(e) {
+		this.ondown(e.x,e.y);
+	}
+	,onmousemove: function(e) {
+		this.onmove(e.x,e.y);
+	}
+	,onmouseup: function(e) {
+		this.onup();
+	}
+	,ontouchdown: function(e) {
+		this.ondown(e.x * Luxe.core.screen.get_w(),e.y * Luxe.core.screen.get_h());
+	}
+	,ontouchmove: function(e) {
+		this.onmove(e.x * Luxe.core.screen.get_w(),e.y * Luxe.core.screen.get_h());
+	}
+	,ontouchup: function(e) {
+		this.onup();
 	}
 	,update: function(dt) {
 	}
@@ -2785,12 +2806,18 @@ components_Dragable.prototype = $extend(luxe_Component.prototype,{
 		this.get_entity()._unlisten(17,$bind(this,this.onmousedown));
 		this.get_entity()._unlisten(19,$bind(this,this.onmousemove));
 		this.get_entity()._unlisten(18,$bind(this,this.onmouseup));
+		this.get_entity()._unlisten(21,$bind(this,this.ontouchdown));
+		this.get_entity()._unlisten(23,$bind(this,this.ontouchmove));
+		this.get_entity()._unlisten(22,$bind(this,this.ontouchup));
 	}
 	,onremoved: function() {
 		luxe_Component.prototype.onremoved.call(this);
 		this.get_entity()._unlisten(17,$bind(this,this.onmousedown));
 		this.get_entity()._unlisten(19,$bind(this,this.onmousemove));
 		this.get_entity()._unlisten(18,$bind(this,this.onmouseup));
+		this.get_entity()._unlisten(21,$bind(this,this.ontouchdown));
+		this.get_entity()._unlisten(23,$bind(this,this.ontouchmove));
+		this.get_entity()._unlisten(22,$bind(this,this.ontouchup));
 	}
 	,__class__: components_Dragable
 });
