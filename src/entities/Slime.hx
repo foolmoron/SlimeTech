@@ -13,6 +13,8 @@ import nape.geom.*;
 
 class Slime extends Entity {
 
+    public static var SLIME_MATERIAL = Material.sand();
+
     public var collider : CircleCollider;
 
     public var backSprite : Sprite;
@@ -32,6 +34,7 @@ class Slime extends Entity {
             y: 0,
             r: 4,
             body_type: BodyType.DYNAMIC,
+            material: SLIME_MATERIAL,
         }));
 
         backSprite = new Sprite({
