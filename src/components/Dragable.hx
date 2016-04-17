@@ -27,7 +27,7 @@ class Dragable extends Component {
     }
 
     override function onmousedown(e:MouseEvent) {
-        if (e.button == 3 && contains(e.x, e.y)) {
+        if (contains(e.x, e.y)) {
             dragging = true;
             prevMousePos = new Vec(e.x, e.y);
         }
@@ -47,9 +47,7 @@ class Dragable extends Component {
     }
 
     override function onmouseup(e:MouseEvent) {
-        if (e.button == 3) {
-            dragging = false;
-        }
+        dragging = false;
     }
 
     override function update(dt:Float) {

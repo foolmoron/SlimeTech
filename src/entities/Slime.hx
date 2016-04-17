@@ -62,8 +62,6 @@ class Slime extends Entity {
         frontSprite.color.a = 1;
         frontSprite.size.x = 20;
         frontSprite.size.y = 20;
-        collider.body.allowMovement = true;
-        collider.body.allowRotation = true;
         var angle = Main.rand.get() * Math.PI * 2;
         collider.body.velocity = new Vec2(Math.cos(angle), Math.sin(angle)).muleq(Main.rand.get() * 5);
     }
@@ -99,8 +97,6 @@ class Slime extends Entity {
             backSprite.color.a = lifeLerp;
             frontSprite.size.x = lifeLerp * 20;
             frontSprite.size.y = lifeLerp * 20;
-            // collider.body.allowMovement = lifeLerp >= 1;
-            // collider.body.allowRotation = lifeLerp >= 1;
         }
     }
 }

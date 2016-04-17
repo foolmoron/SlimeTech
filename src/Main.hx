@@ -12,6 +12,7 @@ import luxe.components.physics.nape.*;
 import nape.phys.*;
 import nape.shape.*;
 import entities.*;
+import components.*;
 import states.*;
 
 class Main extends luxe.Game {
@@ -31,6 +32,8 @@ class Main extends luxe.Game {
         config.preload.textures.push({ id:'assets/textures/blobback.png' });
         config.preload.textures.push({ id:'assets/textures/bgthing.png' });
         config.preload.textures.push({ id:'assets/textures/fg.png' });
+        config.preload.textures.push({ id:'assets/textures/button.png' });
+        config.preload.textures.push({ id:'assets/textures/buttondown.png' });
         return config;
     }
 

@@ -45,6 +45,7 @@ class Attractor extends Entity {
             size: new Vec(32, 32),
             depth: 150,
         });
+        sprite.rotation_z = Main.rand.get() * 360;
     }
 
     public override function update(dt:Float) {

@@ -12,7 +12,7 @@ class TitleState extends SceneState {
 
     override function onenter<T>(with:T) {
         scene.add(new Text({
-            text : 'SLIMY SQUAD!',
+            text : 'SLIME TECH',
             color: new Color().rgb(0x000000),
             align: TextAlign.center,
             align_vertical: TextAlign.center,
