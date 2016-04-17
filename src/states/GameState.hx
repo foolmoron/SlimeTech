@@ -6,31 +6,22 @@ import luxe.Input;
 import luxe.Log.*;
 import entities.*;
 
-class GameState extends State {
-        
-    var slimePool:SlimePool;
-
-    public function new(?_options:StateOptions) {
-        super(_options);
-    } 
-
-    override function init() {
-    }
+class GameState extends SceneState {
 
     override function onenter<T>(with:T) {
-        slimePool = new SlimePool();
-    }
-
-    override function onleave<T>(with:T) {
-        slimePool.destroy();
-        slimePool = null;
+        scene.add(new SlimePool({
+            name: 'SlimePool',
+            pos: Luxe.screen.mid,
+        }));
     }
 
     override function onkeyup(e:KeyEvent) {
         Main.state.set('title');
     }
 
-    override function update(dt:Float) {
+    override function onmousedown(e:MouseEvent) {
+    }
 
+    override function update(dt:Float) {
     }
 }
