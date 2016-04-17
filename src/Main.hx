@@ -84,7 +84,7 @@ class Main extends luxe.Game {
                 p0: new Vec(x * gridSize + 30, 54),
                 p1: new Vec(x * gridSize + 30, Luxe.screen.size.y),
                 color: new Color().rgb(0xb8b8b8),
-                depth: -99,
+                depth: -95,
             });
         }
         for (y in 1 ... ygrid-1) {
@@ -92,7 +92,7 @@ class Main extends luxe.Game {
                 p0: new Vec(30, y * gridSize + 54),
                 p1: new Vec(Luxe.screen.size.x, y * gridSize + 54),
                 color: new Color().rgb(0xb8b8b8),
-                depth: -99,
+                depth: -95,
             });
         }
 
@@ -103,6 +103,44 @@ class Main extends luxe.Game {
                 grid[x].push(0);
             }
         }
+
+        // polys
+        Luxe.draw.ngon({
+            r: 100,
+            sides: 3,
+            solid: true,
+            color: new Color().rgb(0xffb75a),
+            x: 140, 
+            y: 600,
+            depth: -99,
+        });
+        Luxe.draw.ngon({
+            r: 84,
+            sides: 3,
+            solid: true,
+            color: new Color().rgb(0xe9e9e9),
+            x: 140, 
+            y: 600,
+            depth: -99,
+        });
+        Luxe.draw.ngon({
+            r: 100,
+            sides: 4,
+            solid: true,
+            color: new Color().rgb(0xffb75a),
+            x: 550, 
+            y: 330,
+            depth: -99,
+        });
+        Luxe.draw.ngon({
+            r: 90,
+            sides: 4,
+            solid: true,
+            color: new Color().rgb(0xe9e9e9),
+            x: 550, 
+            y: 330,
+            depth: -99,
+        });
 
         // states
         state = new States({ name: 'game' });

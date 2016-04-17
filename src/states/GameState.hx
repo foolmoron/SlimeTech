@@ -41,14 +41,14 @@ class GameState extends SceneState {
 
         var buttonLeft = new Button({
             name: 'buttonLeft',
-            pos: new Vec(40, Luxe.screen.h - 60),
+            pos: new Vec(40, Luxe.screen.h - 52),
         });
         buttonLeft.onClick = function() { log('LEFT'); };
         scene.add(buttonLeft);
 
         var buttonRight = new Button({
             name: 'buttonRight',
-            pos: new Vec(Luxe.screen.w - 40, Luxe.screen.h - 60),
+            pos: new Vec(Luxe.screen.w - 40, Luxe.screen.h - 52),
         });
         buttonRight.upSprite.flipx = true;
         buttonRight.downSprite.flipx = true;
