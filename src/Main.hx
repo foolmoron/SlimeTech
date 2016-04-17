@@ -18,6 +18,9 @@ class Main extends luxe.Game {
 
     public static var rand = new Random(0x3389345);
     public static var state : States;
+
+    public static var squareSize = 640;
+    public static var squareOffset = new Vec(0, -26);
     public static var gridSize = 32;
 
     public static var grid = new Array<Array<Float>>();
@@ -26,11 +29,14 @@ class Main extends luxe.Game {
     override function config(config:luxe.AppConfig) {
         config.preload.textures.push({ id:'assets/textures/blob.png' });
         config.preload.textures.push({ id:'assets/textures/blobback.png' });
+        config.preload.textures.push({ id:'assets/textures/bgthing.png' });
+        config.preload.textures.push({ id:'assets/textures/fg.png' });
         return config;
     }
 
     override function ready() {
         log('READY');
+        untyped document.body.style.backgroundColor = "#efefef";
         new FPS();
 
         // physics
@@ -38,36 +44,52 @@ class Main extends luxe.Game {
 
         // border physics
         var border = new Body(BodyType.STATIC);
-        border.shapes.add(new Polygon(Polygon.rect(0, 0, Luxe.screen.w, -1)));
-        border.shapes.add(new Polygon(Polygon.rect(0, Luxe.screen.h, Luxe.screen.w, 1)));
-        border.shapes.add(new Polygon(Polygon.rect(0, 0, -1, Luxe.screen.h)));
-        border.shapes.add(new Polygon(Polygon.rect(Luxe.screen.w, 0, 1, Luxe.screen.h)));
+        border.shapes.add(new Polygon(Polygon.rect(0, 54, Luxe.screen.w, -200)));
+        border.shapes.add(new Polygon(Polygon.rect(0, Luxe.screen.h - 106, Luxe.screen.w, 200)));
+        border.shapes.add(new Polygon(Polygon.rect(30, 0, -200, Luxe.screen.h)));
+        border.shapes.add(new Polygon(Polygon.rect(Luxe.screen.w - 30, 0, 200, Luxe.screen.h)));
         border.space = Luxe.physics.nape.space;
 
-        // background
-        var background = new Sprite({
-            name: 'background',
+        // stuff
+        var gridsquare = new Sprite({
+            name: 'gridsquare',
             color: new Color().rgb(0xe9e9e9),
+            pos: Luxe.screen.mid + squareOffset,
+            size: new Vec(squareSize, squareSize),
+            depth: -100,
+        });
+        var bgthing = new Sprite({
+            name: 'bgthing',
+            texture: tex('bgthing'),
             pos: Luxe.screen.mid,
             size: Luxe.screen.size,
-            depth: -100,
+            depth: -90,
+        });
+        var fg = new Sprite({
+            name: 'fg',
+            texture: tex('fg'),
+            pos: Luxe.screen.mid,
+            size: Luxe.screen.size,
+            depth: 100,
         });
 
         // grid lines
         var xgrid = Math.floor(Luxe.screen.size.x / gridSize);
         var ygrid = Math.floor(Luxe.screen.size.y / gridSize);
-        for (x in 1 ... xgrid) {
+        for (x in 1 ... xgrid-1) {
             Luxe.draw.line({
-                p0: new Vec(x * gridSize, 0),
-                p1: new Vec(x * gridSize, Luxe.screen.size.y),
+                p0: new Vec(x * gridSize + 30, 54),
+                p1: new Vec(x * gridSize + 30, Luxe.screen.size.y),
                 color: new Color().rgb(0xb8b8b8),
+                depth: -99,
             });
         }
-        for (y in 1 ... ygrid) {
+        for (y in 1 ... ygrid-1) {
             Luxe.draw.line({
-                p0: new Vec(0, y * gridSize),
-                p1: new Vec(Luxe.screen.size.x, y * gridSize),
+                p0: new Vec(30, y * gridSize + 54),
+                p1: new Vec(Luxe.screen.size.x, y * gridSize + 54),
                 color: new Color().rgb(0xb8b8b8),
+                depth: -99,
             });
         }
 

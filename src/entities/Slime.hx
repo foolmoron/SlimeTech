@@ -12,8 +12,6 @@ import nape.geom.*;
 
 class Slime extends Entity {
 
-    public static var SLIME_COUNT = 0;
-
     public var collider : CircleCollider;
 
     public var backSprite : Sprite;
@@ -30,26 +28,21 @@ class Slime extends Entity {
         }));
 
         backSprite = new Sprite({
-            {
-                name: 'sprite' + SLIME_COUNT,
-                parent: this,
-                texture: Main.tex('blobback'),
-                color: new Color().rgb(0xbeb9ff),
-                size: new Vec(32, 32),
-                depth: 0,
-            }
+            name: 'backsprite',
+            parent: this,
+            texture: Main.tex('blobback'),
+            color: new Color().rgb(0xbeb9ff),
+            size: new Vec(32, 32),
+            depth: 0,
         });
         frontSprite = new Sprite({
-            {
-                name: 'sprite' + SLIME_COUNT,
-                parent: this,
-                texture: Main.tex('blob'),
-                color: new Color().rgb(0x464fff),
-                size: new Vec(20, 20),
-                depth: 0.1,
-            }
+            name: 'frontsprite',
+            parent: this,
+            texture: Main.tex('blob'),
+            color: new Color().rgb(0x464fff),
+            size: new Vec(20, 20),
+            depth: 0.1,
         });
-        SLIME_COUNT++;
         reset();
     }
 
@@ -57,7 +50,7 @@ class Slime extends Entity {
         backSprite.rotation_z += Main.rand.get() * 360;
         frontSprite.rotation_z += Main.rand.get() * 360;
         var angle = Main.rand.get() * Math.PI * 2;
-        collider.body.velocity = new Vec2(Math.cos(angle), Math.sin(angle)).muleq(Main.rand.get() * 10);
+        collider.body.velocity = new Vec2(Math.cos(angle), Math.sin(angle)).muleq(Main.rand.get() * 100);
     }
 
     public function setColor(color:Color) {
@@ -65,7 +58,5 @@ class Slime extends Entity {
     }
 
     public override function update(dt:Float) {
-        frontSprite.color.r = pos.x / Luxe.screen.w;
-        frontSprite.color.b = pos.y / Luxe.screen.h;
     }
 }

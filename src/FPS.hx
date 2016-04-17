@@ -8,6 +8,7 @@ class FPS extends Text {
     public function new( ?_options:luxe.options.TextOptions ) {
         def(_options, {});
         def(_options.name, "fps");
+        def(_options.depth, 10000);
         def(_options.color, new Color().rgb(0x000000));
         def(_options.pos, new Vector(Luxe.screen.w - 5, 5));
         def(_options.point_size, 14);

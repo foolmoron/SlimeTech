@@ -1,9 +1,9 @@
 {
   luxe:{
     window: {
-      width: 640,
-      height: 640,
-      title:'SlimySquad',
+      width: 700,
+      height: 800,
+      title:'Slime Tech',
       fullscreen: false,
       resizable: false,
       borderless: false
@@ -11,13 +11,13 @@
   },
 
   project : {
-    name : 'SlimySquad',
+    name : 'Slime Tech',
     version : '0.0.1',
-    author : 'SlimySquad',
+    author : '@foolmoron',
 
     app : {
       name : 'slimysquad',
-      package : 'com.foolmoron.SlimySquad'
+      package : 'com.foolmoron.SlimeTech'
     },
 
     build : {
