@@ -6,6 +6,7 @@ import luxe.Color;
 import luxe.options.*;
 import luxe.Input;
 import luxe.Vector;
+import luxe.Text;
 import luxe.Log.*;
 import entities.*;
 import components.*;
@@ -13,13 +14,27 @@ import components.*;
 class GameState extends SceneState {
 
     public var slimePool : SlimePool;
-    public var z : FillPoly;
+    public var fillPolys : Array<FillPoly>;
+
+    public var buttonLeft : Button;
+    public var buttonRight : Button;
+
+    public var levelId = -1;
+    public var levelDef : Level;
+
+    public function new(_options:StateOptions, levelId:Int, levelDef:Level) {
+        super(_options);
+
+        this.levelId = levelId;
+        this.levelDef = levelDef;
+    }
 
     override function onenter<T>(with:T) {
         slimePool = new SlimePool({
             name: 'SlimePool',
-            pos: Luxe.screen.mid,
+            pos: levelDef.sourcePos,
         });
+        slimePool.initialVelocity = levelDef.sourceVel;
         scene.add(slimePool);
 
         var attractor1 = new Attractor({
@@ -43,74 +58,74 @@ class GameState extends SceneState {
         attractor3.targets = slimePool.slimeColliders;
         scene.add(attractor3);
 
-        var buttonLeft = new Button({
-            name: 'buttonLeft',
-            pos: new Vec(40, Luxe.screen.h - 52),
-        });
-        buttonLeft.onClick = function() { log('LEFT'); };
-        scene.add(buttonLeft);
+        if (levelId > 1) {
+            buttonLeft = new Button({
+                name: 'buttonLeft',
+                pos: new Vec(40, Luxe.screen.h - 52),
+            });
+            buttonLeft.onClick = function() { Main.state.set('game' + (levelId - 1)); };
+            scene.add(buttonLeft);
+        }
 
-        var buttonRight = new Button({
-            name: 'buttonRight',
-            pos: new Vec(Luxe.screen.w - 40, Luxe.screen.h - 52),
-        });
-        buttonRight.upSprite.flipx = true;
-        buttonRight.downSprite.flipx = true;
-        buttonRight.onClick = function() { log('RIGHT'); };
-        scene.add(buttonRight);
+        if (levelId < Main.LEVELS.length) {
+            buttonRight = new Button({
+                name: 'buttonRight',
+                pos: new Vec(Luxe.screen.w - 40, Luxe.screen.h - 52),
+            });
+            buttonRight.upSprite.flipx = true;
+            buttonRight.downSprite.flipx = true;
+            buttonRight.disabledSprite.flipx = true;
+            buttonRight.onClick = function() { Main.state.set('game' + (levelId + 1)); };
+            scene.add(buttonRight);
+        }
+
+        // tutorial
+        if (levelId == 1) {
+            scene.add(new Text({
+                text : 'tut stuff',
+                color: new Color().rgb(0x000000),
+                align: TextAlign.center,
+                align_vertical: TextAlign.center,
+                pos : new Vec(Luxe.screen.w/2, 400),
+                point_size: 36,
+                depth: 500,
+            }));
+        }
 
         // polys
-        scene.add(new FillPoly({
-            name: 'poly1',
-            pos: new Vec(140, 600)
-        }, {
-            r: 100,
-            sides: 3,
-            color: new Color().rgb(0xff9d1e),         
-        }, slimePool.slimes));
-        scene.add(new FillPoly({
-            name: 'poly2',
-            pos: new Vec(550, 330)
-        }, {
-            r: 100,
-            sides: 4,
-            color: new Color().rgb(0xff9d1e),
-        }, slimePool.slimes));
-        scene.add(new FillPoly({
-            name: 'poly3',
-            pos: new Vec(200, 250)
-        }, {
-            r: 100,
-            sides: 7,
-            color: new Color().rgb(0xff9d1e),
-        }, slimePool.slimes));
-        scene.add(new FillPoly({
-            name: 'poly4',
-            pos: new Vec(0, 400)
-        }, {
-            r: 100,
-            sides: 5,
-            color: new Color().rgb(0xff9d1e),
-        }, slimePool.slimes));
-        scene.add(z = new FillPoly({
-            name: 'poly5',
-            pos: new Vec(400, 500)
-        }, {
-            r: 100,
-            sides: 6,
-            color: new Color().rgb(0xff9d1e),
-        }, slimePool.slimes));
-    }
-
-    override function onkeyup(e:KeyEvent) {
-        Main.state.set('title');
+        fillPolys = new Array<FillPoly>();
+        for (poly in levelDef.polys) {
+            var fillPoly = new FillPoly({
+                name: 'poly' + fillPolys.length,
+                pos: poly.pos,
+            }, {
+                r: 86,
+                sides: poly.sides,
+                color: new Color().rgb(0xff9d1e),
+                depth: -99,
+            }, slimePool.slimes);
+            fillPolys.push(fillPoly);
+            scene.add(fillPoly);
+        }
     }
 
     override function onmousedown(e:MouseEvent) {
     }
 
     override function update(dt:Float) {
-        if (z.solved) {
+        if (buttonRight != null) {
+            buttonRight.disabled = Main.solvedLevel < levelId;
+        }
+
+        var anyUnsolved = false;
+        for (poly in fillPolys) {
+            if (Main.solvedLevel >= levelId) {
+                poly.fillAmount = 1;
+            }
+            anyUnsolved = anyUnsolved || (poly.fillAmount < 1);
+        }
+        if (!anyUnsolved) {
+            Main.solvedLevel = levelId > Main.solvedLevel ? levelId : Main.solvedLevel;
             for (slime in slimePool.slimes) {
                 slime.isRainbow = true;
             }

@@ -16,6 +16,8 @@ class SlimePool extends Entity {
     public var slimeCount = 200;
     public var slimes = new Array<Slime>();
     public var slimeColliders = new Array<CircleCollider>();
+
+    public var initialVelocity = new Vec2(0, 0);
     
     public var emitSpeed = 20;
     public var emitTime = 0.0;
@@ -50,6 +52,8 @@ class SlimePool extends Entity {
         for (i in 0 ... slimeCount) {
             var slime = new Slime();
             slime.collider.body.position = new Vec2(pos.x, pos.y);
+            var angle = Main.rand.get() * Math.PI * 2;
+            slime.collider.body.velocity = initialVelocity.add(new Vec2(Math.cos(angle), Math.sin(angle)).muleq(Main.rand.get() * 5));
             slimes.push(slime);
             slimeColliders.push(slime.collider);
         }
@@ -70,6 +74,8 @@ class SlimePool extends Entity {
                     slime.reset();
                     slime.collider.body.position = new Vec2(pos.x, pos.y);
                     slime.pos = new Vec(pos.x, pos.y);
+                    var angle = Main.rand.get() * Math.PI * 2;
+                    slime.collider.body.velocity = initialVelocity.add(new Vec2(Math.cos(angle), Math.sin(angle)).muleq(Main.rand.get() * 5));
                     slime.enable();
                     emitCount--;
                 }
@@ -77,7 +83,10 @@ class SlimePool extends Entity {
         }
         var timeMultiplier = emit ? 1 : 5;
         for (slime in slimes) {
-            slime.lifeTimeMultiplier = timeMultiplier;
+            if (!emit) {
+                slime.lifeTime = Math.max(slime.lifeTime, slime.lifeTimeMax/2);
+                slime.lifeTimeMultiplier = 5;
+            }
         }
     }
 

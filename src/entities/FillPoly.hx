@@ -28,13 +28,11 @@ class FillPoly extends Entity {
     public var fillAmount = 0.0;
     public var fillMultiplier = 0.9;
     public static var fillRatePerSlime = 0.01;
-    public static var minSlimesBeforeDraining = 20;
+    public static var minSlimesBeforeDraining = 10;
     public static var fillDrainRate = fillRatePerSlime * minSlimesBeforeDraining;
 
     public var collider : PolygonCollider;
     public var slimes : Array<Slime>;
-
-    public var solved = false;
 
     public function new(?_options:EntityOptions, ?_polyOpts:DrawNgonOptions, s:Array<Slime>) {
         super(_options);
@@ -79,14 +77,12 @@ class FillPoly extends Entity {
     }
 
     override function update(dt:Float) {
-        solved = fillAmount >= 1;
-
         var polygon = collider.body.shapes.at(0);
         var containedSlimes = 0;
         for (slime in slimes) {
             if (slime.isEnabled && polygon.contains(slime.collider.body.position)) {
                 slime.isActive = slime.isActive || true;
-                slime.isRainbow = slime.isRainbow || solved;
+                slime.isRainbow = slime.isRainbow || fillAmount >= 1;
                 containedSlimes++;
             }
         }

@@ -17,9 +17,11 @@ class Button extends Entity {
     public var rectX = 40;
     public var rectY = 76;
     public var down = false;
+    public var disabled = false;
 
     public var upSprite : Sprite;
     public var downSprite : Sprite;
+    public var disabledSprite : Sprite;
 
     public var onClick = function() {};
 
@@ -40,6 +42,13 @@ class Button extends Entity {
             size: new Vec(40, 76),
             depth: 101,
         });
+        disabledSprite = new Sprite({
+            name: 'down',
+            parent: this,
+            texture: Main.tex('buttondisabled'),
+            size: new Vec(40, 76),
+            depth: 101,
+        });
     }
 
     public function contains(x:Float, y:Float) {
@@ -55,14 +64,15 @@ class Button extends Entity {
     }
 
     override function onmouseup(e:MouseEvent) {
-        if (down && contains(e.x, e.y)) {
+        if (down && !disabled && contains(e.x, e.y)) {
             onClick();
         }
         down = false;
     }
 
     override function update(dt:Float) {
-        upSprite.color.a = down ? 0 : 1;
-        downSprite.color.a = down ? 1 : 0;
+        upSprite.color.a = !down && !disabled ? 1 : 0;
+        downSprite.color.a = down && !disabled ? 1 : 0;
+        disabledSprite.color.a = disabled ? 1 : 0;
     }
 }

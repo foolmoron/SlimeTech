@@ -5,6 +5,7 @@ import luxe.States;
 import luxe.Vector;
 import luxe.Ev;
 import luxe.Log.*;
+import luxe.IO;
 import luxe.utils.Random;
 import luxe.utils.Maths;
 import luxe.tween.easing.*;
@@ -27,13 +28,18 @@ class Main extends luxe.Game {
     public static var grid = new Array<Array<Float>>();
     public static var gridCalcFrame = true;
 
+    public static var LEVELS = new Array<Level>();
+    public static var solvedLevel = 0;
+
     override function config(config:luxe.AppConfig) {
+        config.preload.jsons.push({ id:'assets/levels.json' });
         config.preload.textures.push({ id:'assets/textures/blob.png' });
         config.preload.textures.push({ id:'assets/textures/blobback.png' });
         config.preload.textures.push({ id:'assets/textures/bgthing.png' });
         config.preload.textures.push({ id:'assets/textures/fg.png' });
         config.preload.textures.push({ id:'assets/textures/button.png' });
         config.preload.textures.push({ id:'assets/textures/buttondown.png' });
+        config.preload.textures.push({ id:'assets/textures/buttondisabled.png' });
         return config;
     }
 
@@ -42,8 +48,29 @@ class Main extends luxe.Game {
         untyped document.body.style.backgroundColor = "#efefef";
         new FPS();
 
+        var l = Std.parseInt(app.io.string_load('solved'));
+        if (l != null) {
+            solvedLevel = l;
+        }
+        solvedLevel = 0;
+
         // physics
         Luxe.physics.nape.gravity = new Vec(0, 0);
+
+        var json = Luxe.resources.json('assets/levels.json');
+        var items : Array<Dynamic> = json.asset.json;
+        for (item in items) {
+            var level = new Level();
+            level.sourcePos.x = item.sourcePos[0];
+            level.sourcePos.y = item.sourcePos[1];
+            level.sourceVel.x = item.sourceVel[0];
+            level.sourceVel.y = item.sourceVel[1];
+            var polys : Array<Dynamic> = item.polys;
+            for (poly in polys) {
+                level.polys.push(new PolyDef(poly.sides, poly.pos[0], poly.pos[1]));
+            }
+            LEVELS.push(level);
+        }
 
         // border physics
         var border = new Body(BodyType.STATIC);
@@ -108,9 +135,11 @@ class Main extends luxe.Game {
         state = new States({ name: 'game' });
 
         state.add(new TitleState({name: 'title'}));
-        state.add(new GameState({name: 'game'}));
+        for (i in 0 ... LEVELS.length) {
+            state.add(new GameState({name: 'game' + (i + 1)}, i + 1, LEVELS[i]));            
+        }
         Luxe.on(Ev.init, function(_) {
-            state.set('game');
+            state.set('title');
         });
     }
 
@@ -131,6 +160,7 @@ class Main extends luxe.Game {
         gridCalcFrame = !gridCalcFrame;
 
         FillPoly.IsFillFrame = !FillPoly.IsFillFrame;
+        app.io.string_save('solved', ''+solvedLevel);
     }
 
     public static function tex(id:String) {
