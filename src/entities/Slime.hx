@@ -61,6 +61,7 @@ class Slime extends Entity {
 
     public function reset() {
         lifeTime = 0;
+        lifeTimeMultiplier = 1;
         backSprite.rotation_z += Main.rand.get() * 360;
         frontSprite.rotation_z += Main.rand.get() * 360;
         backSprite.color.a = 1;
@@ -94,22 +95,25 @@ class Slime extends Entity {
                 disable();
             }
 
+            if (isRainbow) {
+                var angleLerp = (Math.atan2(collider.body.velocity.y, collider.body.velocity.x) + Math.PI)/(Math.PI*2);
+                frontSprite.color = new ColorHSV(angleLerp*360, 0.75, 1, 1).toColor();
+                backSprite.color = new ColorHSV(angleLerp*360, 0.4, 1, 1).toColor();
+            } else if (isActive) {
+                frontSprite.color.rgb(0x44e42b);
+                backSprite.color.rgb(0xbeb9ff);
+            } else {
+                frontSprite.color.rgb(0x464fff);
+                backSprite.color.rgb(0xbeb9ff);
+            }
+
             var lifeLerp = Maths.clamp(1 - (lifeTime / lifeTimeMax), 0, 0.25) * 4;
             backSprite.color.a = lifeLerp;
             frontSprite.size.x = lifeLerp * 20;
             frontSprite.size.y = lifeLerp * 20;
-        }
 
-        if (isRainbow) {
-            var angleLerp = (Math.atan2(collider.body.velocity.y, collider.body.velocity.x) + Math.PI)/(Math.PI*2);
-            frontSprite.color = new ColorHSV(angleLerp*360, 0.75, 1, 1).toColor();
-        } else if (isActive) {
-            frontSprite.color.rgb(0x44e42b);
-        } else {
-            frontSprite.color.rgb(0x464fff);
+            isActive = false;
+            isRainbow = false;
         }
-
-        isActive = false;
-        isRainbow = false;
     }
 }
