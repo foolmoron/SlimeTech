@@ -104,44 +104,6 @@ class Main extends luxe.Game {
             }
         }
 
-        // polys
-        Luxe.draw.ngon({
-            r: 100,
-            sides: 3,
-            solid: true,
-            color: new Color().rgb(0xffb75a),
-            x: 140, 
-            y: 600,
-            depth: -99,
-        });
-        Luxe.draw.ngon({
-            r: 84,
-            sides: 3,
-            solid: true,
-            color: new Color().rgb(0xe9e9e9),
-            x: 140, 
-            y: 600,
-            depth: -99,
-        });
-        Luxe.draw.ngon({
-            r: 100,
-            sides: 4,
-            solid: true,
-            color: new Color().rgb(0xffb75a),
-            x: 550, 
-            y: 330,
-            depth: -99,
-        });
-        Luxe.draw.ngon({
-            r: 90,
-            sides: 4,
-            solid: true,
-            color: new Color().rgb(0xe9e9e9),
-            x: 550, 
-            y: 330,
-            depth: -99,
-        });
-
         // states
         state = new States({ name: 'game' });
 
@@ -167,6 +129,8 @@ class Main extends luxe.Game {
             }            
         }
         gridCalcFrame = !gridCalcFrame;
+
+        FillPoly.IsFillFrame = !FillPoly.IsFillFrame;
     }
 
     public static function tex(id:String) {

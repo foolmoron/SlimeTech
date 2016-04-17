@@ -23,7 +23,7 @@ class Attractor extends Entity {
     public var sprite : Sprite;
     public var rotationRate = 180;
 
-    public var targets : Array<NapeBody>;
+    public var targets : Array<CircleCollider>;
 
     public function new(?_options:EntityOptions) {
         super(_options);

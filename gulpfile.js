@@ -24,7 +24,7 @@ gulp.task('watch',  function(done){
     }
   });
 
-  gulp.watch(['src/**', 'assets/**'], ['haxe:watch']);
+  gulp.watch(['gulpfile.js'], ['haxe:watch']);
 });
 
 gulp.task('default', ['haxe:build', 'watch']);

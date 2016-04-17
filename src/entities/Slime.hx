@@ -25,6 +25,8 @@ class Slime extends Entity {
     public var lifeTimeMultiplier = 1.0;
 
     public var isEnabled = true;
+    public var isActive = false;
+    public var isRainbow = false;
 
     public function new(?_options:EntityOptions) {
         super(_options);
@@ -69,10 +71,6 @@ class Slime extends Entity {
         collider.body.velocity = new Vec2(Math.cos(angle), Math.sin(angle)).muleq(Main.rand.get() * 5);
     }
 
-    public function setColor(color:Color) {
-        frontSprite.color = color;
-    }
-
     public function enable() {
         collider.body.allowMovement = true;
         collider.body.allowRotation = true;
@@ -101,5 +99,16 @@ class Slime extends Entity {
             frontSprite.size.x = lifeLerp * 20;
             frontSprite.size.y = lifeLerp * 20;
         }
+
+        if (isRainbow) {
+            frontSprite.color.r = (pos.x - Luxe.screen.w/2) / 300;
+            frontSprite.color.g = (pos.y - Luxe.screen.h/2) / 300;
+        } else if (isActive) {
+            frontSprite.color.rgb(0x44e42b);
+        } else {
+            frontSprite.color.rgb(0x464fff);
+        }
+
+        isActive = false;
     }
 }
