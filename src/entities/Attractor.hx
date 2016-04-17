@@ -15,6 +15,11 @@ import components.*;
 
 class Attractor extends Entity {
 
+    public var disableOutsideRect = { tlx: 30, tly: 54, brx: Luxe.screen.w - 30, bry: 694 };
+    public function enabled() {
+        return pos.x >= disableOutsideRect.tlx && pos.x <= disableOutsideRect.brx && pos.y >= disableOutsideRect.tly && pos.y <= disableOutsideRect.bry;
+    }
+
     public var sprite : Sprite;
     public var rotationRate = 180;
 
@@ -28,16 +33,25 @@ class Attractor extends Entity {
         dragable.rectY = 32;
         add(dragable);
 
+        var boundToScreen = new BoundToScreen({name: 'boundToScreen'});
+        boundToScreen.rectX = 32;
+        boundToScreen.rectY = 32;
+        add(boundToScreen);
+
         sprite = new Sprite({
             name: 'sprite',
             parent: this,
             color: new Color().rgb(0x000000),
             size: new Vec(32, 32),
-            depth: 1,
+            depth: 150,
         });
     }
 
     public override function update(dt:Float) {
+        if (!enabled()) {
+            return;
+        }
+
         sprite.rotation_z += rotationRate*dt;
 
         // pull in targets
