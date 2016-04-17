@@ -26,28 +26,49 @@ class Dragable extends Component {
         return dx < rectX/2 && dy < rectY/2;
     }
 
-    override function onmousedown(e:MouseEvent) {
-        if (contains(e.x, e.y)) {
+    public function ondown(x:Float, y:Float) {
+        if (contains(x, y)) {
             dragging = true;
-            prevMousePos = new Vec(e.x, e.y);
-        }
+            prevMousePos = new Vec(x, y);
+        }        
     }
 
-    override function onmousemove(e:MouseEvent) {
+    public function onmove(x:Float, y:Float) {
         if (dragging) {
             if (napeBody != null) {
                 var delta = new Vec(napeBody.body.position.x, napeBody.body.position.y) - prevMousePos;
                 napeBody.body.position.addeq(new Vec2(delta.x, delta.y));
             } else {
-                pos.x += e.x - prevMousePos.x;
-                pos.y += e.y - prevMousePos.y;
+                pos.x += x - prevMousePos.x;
+                pos.y += y - prevMousePos.y;
             }
-            prevMousePos = new Vec(e.x, e.y);
+            prevMousePos = new Vec(x, y);
         }
     }
 
-    override function onmouseup(e:MouseEvent) {
+    public function onup() {
         dragging = false;
+        
+    }
+
+    override function onmousedown(e:MouseEvent) {
+        ondown(e.x, e.y);
+    }
+    override function onmousemove(e:MouseEvent) {
+        onmove(e.x, e.y);
+    }
+    override function onmouseup(e:MouseEvent) {
+        onup();
+    }
+
+    override function ontouchdown(e:TouchEvent) {
+        ondown(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+    }
+    override function ontouchmove(e:TouchEvent) {
+        onmove(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+    }
+    override function ontouchup(e:TouchEvent) {
+        onup();
     }
 
     override function update(dt:Float) {
