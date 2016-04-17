@@ -101,8 +101,8 @@ class Slime extends Entity {
         }
 
         if (isRainbow) {
-            frontSprite.color.r = (pos.x - Luxe.screen.w/2) / 300;
-            frontSprite.color.g = (pos.y - Luxe.screen.h/2) / 300;
+            var angleLerp = (Math.atan2(collider.body.velocity.y, collider.body.velocity.x) + Math.PI)/(Math.PI*2);
+            frontSprite.color = new ColorHSV(angleLerp*360, 0.75, 1, 1).toColor();
         } else if (isActive) {
             frontSprite.color.rgb(0x44e42b);
         } else {
@@ -110,5 +110,6 @@ class Slime extends Entity {
         }
 
         isActive = false;
+        isRainbow = false;
     }
 }

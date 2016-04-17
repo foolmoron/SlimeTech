@@ -27,9 +27,14 @@ class FillPoly extends Entity {
     public var dir = 0.5;
     public var fillAmount = 0.0;
     public var fillMultiplier = 0.9;
+    public static var fillRatePerSlime = 0.01;
+    public static var minSlimesBeforeDraining = 20;
+    public static var fillDrainRate = fillRatePerSlime * minSlimesBeforeDraining;
 
     public var collider : PolygonCollider;
     public var slimes : Array<Slime>;
+
+    public var solved = false;
 
     public function new(?_options:EntityOptions, ?_polyOpts:DrawNgonOptions, s:Array<Slime>) {
         super(_options);
@@ -74,10 +79,19 @@ class FillPoly extends Entity {
     }
 
     override function update(dt:Float) {
-        if (fillAmount >= 1 || fillAmount <= 0) {
-            dir = -dir;
+        solved = fillAmount >= 1;
+
+        var polygon = collider.body.shapes.at(0);
+        var containedSlimes = 0;
+        for (slime in slimes) {
+            if (slime.isEnabled && polygon.contains(slime.collider.body.position)) {
+                slime.isActive = slime.isActive || true;
+                slime.isRainbow = slime.isRainbow || solved;
+                containedSlimes++;
+            }
         }
-        fillAmount += dir * dt;
+        fillAmount += (fillRatePerSlime * containedSlimes * dt) - (fillDrainRate * dt);
+        fillAmount = Maths.clamp(fillAmount, 0, 1);
 
         outlineOpts.x = pos.x;
         outlineOpts.y = pos.y;
@@ -87,12 +101,5 @@ class FillPoly extends Entity {
         
         Luxe.draw.ngon(outlineOpts);
         Luxe.draw.ngon(fillOpts);
-
-        var polygon = collider.body.shapes.at(0);
-        for (slime in slimes) {
-            if (polygon.contains(slime.collider.body.position)) {
-                slime.isActive = true;
-            }
-        }
     }
 }

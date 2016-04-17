@@ -12,8 +12,11 @@ import components.*;
 
 class GameState extends SceneState {
 
+    public var slimePool : SlimePool;
+    public var z : FillPoly;
+
     override function onenter<T>(with:T) {
-        var slimePool = new SlimePool({
+        slimePool = new SlimePool({
             name: 'SlimePool',
             pos: Luxe.screen.mid,
         });
@@ -63,7 +66,7 @@ class GameState extends SceneState {
         }, {
             r: 100,
             sides: 3,
-            color: new Color().rgb(0x5ef36f),         
+            color: new Color().rgb(0xff9d1e),         
         }, slimePool.slimes));
         scene.add(new FillPoly({
             name: 'poly2',
@@ -71,7 +74,7 @@ class GameState extends SceneState {
         }, {
             r: 100,
             sides: 4,
-            color: new Color().rgb(0x5ef36f),
+            color: new Color().rgb(0xff9d1e),
         }, slimePool.slimes));
         scene.add(new FillPoly({
             name: 'poly3',
@@ -79,7 +82,7 @@ class GameState extends SceneState {
         }, {
             r: 100,
             sides: 7,
-            color: new Color().rgb(0x5ef36f),
+            color: new Color().rgb(0xff9d1e),
         }, slimePool.slimes));
         scene.add(new FillPoly({
             name: 'poly4',
@@ -87,15 +90,15 @@ class GameState extends SceneState {
         }, {
             r: 100,
             sides: 5,
-            color: new Color().rgb(0x5ef36f),
+            color: new Color().rgb(0xff9d1e),
         }, slimePool.slimes));
-        scene.add(new FillPoly({
+        scene.add(z = new FillPoly({
             name: 'poly5',
             pos: new Vec(400, 500)
         }, {
             r: 100,
             sides: 6,
-            color: new Color().rgb(0x5ef36f),
+            color: new Color().rgb(0xff9d1e),
         }, slimePool.slimes));
     }
 
@@ -107,5 +110,10 @@ class GameState extends SceneState {
     }
 
     override function update(dt:Float) {
+        if (z.solved) {
+            for (slime in slimePool.slimes) {
+                slime.isRainbow = true;
+            }
+        }
     }
 }
