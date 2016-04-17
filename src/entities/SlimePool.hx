@@ -21,8 +21,10 @@ class SlimePool extends Entity {
     public var emitTime = 0.0;
     public var emitIndex = 0;
 
+    public var dragable : Dragable;
+
     override function init() {
-        var dragable = new Dragable({name: 'Dragable'});
+        dragable = new Dragable({name: 'Dragable'});
         dragable.rectX = 24;
         dragable.rectY = 24;
         add(dragable);
@@ -43,39 +45,30 @@ class SlimePool extends Entity {
         }
     }
 
-    // override function onmousedown(e:MouseEvent) {
-    //     mousePos = new Vec(e.x, e.y);
-    // }
-    // override function onmousemove(e:MouseEvent) {
-    //     mousePos = new Vec(e.x, e.y);
-    // }
-
-    // override function ontouchdown(e:TouchEvent) {
-    //     mousePos = new Vec(e.x, e.y) * Luxe.screen.size;
-    // }
-    // override function ontouchmove(e:TouchEvent) {
-    //     mousePos = new Vec(e.x, e.y) * Luxe.screen.size;
-    // }
-
     override function update(dt:Float) {
-        // resets
-        emitTime += emitSpeed*dt;
-        var emitCount = Math.floor(emitTime);
-        emitTime -= emitCount;
-        for (i in 0 ... emitCount) {
-            slimes[emitIndex].reset();
-            slimes[emitIndex].collider.body.position = new Vec2(pos.x, pos.y);
-            emitIndex = (emitIndex + 1) % slimes.length;
-        }
+        var emit = !dragable.dragging;
 
-        // // gravity
-        // for (i in 0 ... slimes.length) {
-        //     var vectorToMouse = mousePos - slimes[i].pos;
-        //     var distToMouse = vectorToMouse.length;
-        //     var strength = Maths.clamp(1/distToMouse, 0, 1) * 8;
-        //     var deltaV = vectorToMouse * strength;
-        //     slimes[i].collider.body.velocity.addeq(new Vec2(deltaV.x, deltaV.y));
-        // }
+        if (emit) {
+            emitTime += emitSpeed*dt;
+            var emitCount = Math.floor(emitTime);
+            emitTime -= emitCount;
+            for (slime in slimes) {
+                if (emitCount <= 0) {
+                    break;
+                }
+                if (!slime.isEnabled) {
+                    slime.reset();
+                    slime.collider.body.position = new Vec2(pos.x, pos.y);
+                    slime.pos = new Vec(pos.x, pos.y);
+                    slime.enable();
+                    emitCount--;
+                }
+            }
+        }
+        var timeMultiplier = emit ? 1 : 5;
+        for (slime in slimes) {
+            slime.lifeTimeMultiplier = timeMultiplier;
+        }
     }
 
     override function destroy(?_from_parent:Bool=false) {
