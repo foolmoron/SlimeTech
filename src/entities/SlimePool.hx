@@ -29,6 +29,16 @@ class SlimePool extends Entity {
         dragable.rectY = 24;
         add(dragable);
 
+
+        var boundToArea = new BoundToArea({name: 'boundToArea'});
+        boundToArea.tlx = 30;
+        boundToArea.tly = 54;
+        boundToArea.brx = 670;
+        boundToArea.bry = 694;
+        boundToArea.rectX = 24;
+        boundToArea.rectY = 24;
+        add(boundToArea);
+
         new Sprite({
             name: 'sprite',
             parent: this,

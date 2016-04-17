@@ -33,10 +33,14 @@ class Attractor extends Entity {
         dragable.rectY = 32;
         add(dragable);
 
-        var boundToScreen = new BoundToScreen({name: 'boundToScreen'});
-        boundToScreen.rectX = 32;
-        boundToScreen.rectY = 32;
-        add(boundToScreen);
+        var boundToArea = new BoundToArea({name: 'boundToArea'});
+        boundToArea.tlx = 0;
+        boundToArea.tly = 0;
+        boundToArea.brx = Luxe.screen.w;
+        boundToArea.bry = Luxe.screen.h;
+        boundToArea.rectX = 32;
+        boundToArea.rectY = 32;
+        add(boundToArea);
 
         sprite = new Sprite({
             name: 'sprite',
