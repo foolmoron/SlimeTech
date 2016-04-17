@@ -26,11 +26,10 @@ class SlimePool extends Entity {
     public var dragable : Dragable;
 
     override function init() {
-        dragable = new Dragable({name: 'Dragable'});
-        dragable.rectX = 24;
-        dragable.rectY = 24;
-        add(dragable);
-
+        // dragable = new Dragable({name: 'Dragable'});
+        // dragable.rectX = 24;
+        // dragable.rectY = 24;
+        // add(dragable);
 
         var boundToArea = new BoundToArea({name: 'boundToArea'});
         boundToArea.tlx = 30;
@@ -44,9 +43,10 @@ class SlimePool extends Entity {
         new Sprite({
             name: 'sprite',
             parent: this,
-            color: new Color().rgb(0xff0000),
-            size: new Vec(24, 24),
-            depth: 1,
+            color: new Color().rgb(0xbeb9ff),
+            texture: Main.tex('circle'),
+            size: new Vec(32, 32),
+            depth: 10,
         });
 
         for (i in 0 ... slimeCount) {
@@ -60,7 +60,7 @@ class SlimePool extends Entity {
     }
 
     override function update(dt:Float) {
-        var emit = !dragable.dragging;
+        var emit = true;//!dragable.dragging;
 
         if (emit) {
             emitTime += emitSpeed*dt;

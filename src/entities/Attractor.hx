@@ -21,7 +21,7 @@ class Attractor extends Entity {
     }
 
     public var sprite : Sprite;
-    public var rotationRate = 180;
+    public var rotationRate = -180;
 
     public var targets : Array<CircleCollider>;
 
@@ -46,6 +46,7 @@ class Attractor extends Entity {
             name: 'sprite',
             parent: this,
             color: new Color().rgb(0x000000),
+            texture: Main.tex('swirl'),
             size: new Vec(32, 32),
             depth: 150,
         });

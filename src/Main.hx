@@ -33,6 +33,7 @@ class Main extends luxe.Game {
 
     override function config(config:luxe.AppConfig) {
         config.preload.jsons.push({ id:'assets/levels.json' });
+        config.preload.textures.push({ id:'assets/textures/circle.png' });
         config.preload.textures.push({ id:'assets/textures/blob.png' });
         config.preload.textures.push({ id:'assets/textures/blobback.png' });
         config.preload.textures.push({ id:'assets/textures/bgthing.png' });
@@ -40,6 +41,7 @@ class Main extends luxe.Game {
         config.preload.textures.push({ id:'assets/textures/button.png' });
         config.preload.textures.push({ id:'assets/textures/buttondown.png' });
         config.preload.textures.push({ id:'assets/textures/buttondisabled.png' });
+        config.preload.textures.push({ id:'assets/textures/swirl.png' });
         return config;
     }
 
