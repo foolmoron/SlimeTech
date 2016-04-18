@@ -5,6 +5,7 @@ import luxe.Vector;
 import luxe.Color;
 import luxe.options.StateOptions;
 import luxe.Input;
+import luxe.Sprite;
 import luxe.Text;
 import luxe.Log.*;
 import entities.*;
@@ -22,11 +23,11 @@ class TitleState extends SceneState {
             depth: 500,
         }));
         scene.add(new Text({
-            text : 'by Momin Khan @foolmoron for Ludum Dare 35',
+            text : 'by Momin \'foolmoron\' Khan for Ludum Dare 35',
             color: new Color().rgb(0x000000),
             align: TextAlign.center,
             align_vertical: TextAlign.center,
-            pos : new Vec(Luxe.screen.w/2, 400),
+            pos : new Vec(Luxe.screen.w/2, 430),
             point_size: 24,
             depth: 500,
         }));
@@ -38,6 +39,13 @@ class TitleState extends SceneState {
             pos : new Vec(Luxe.screen.w/2, 740),
             point_size: 48,
             depth: 500,
+        }));
+        scene.add(new Sprite({
+            name: 'heart',
+            texture: Main.tex('heart'),
+            pos: new Vec(Luxe.screen.w/2, 490),
+            size: new Vec(446, 60),
+            depth: -90,
         }));
 
         var slimePool1 = new SlimePool({
@@ -52,7 +60,7 @@ class TitleState extends SceneState {
             pos: new Vec(496, 255),
         });
         attractor1.targets = slimePool1.slimeColliders;
-        attractor1.remove('dragable');
+        attractor1.remove('Dragable');
         scene.add(attractor1);
 
         var slimePool2 = new SlimePool({
@@ -67,7 +75,7 @@ class TitleState extends SceneState {
             pos: new Vec(187, 355),
         });
         attractor2.targets = slimePool2.slimeColliders;
-        attractor2.remove('dragable');
+        attractor2.remove('Dragable');
         scene.add(attractor2);
     }
 

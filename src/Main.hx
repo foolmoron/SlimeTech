@@ -42,19 +42,19 @@ class Main extends luxe.Game {
         config.preload.textures.push({ id:'assets/textures/buttondown.png' });
         config.preload.textures.push({ id:'assets/textures/buttondisabled.png' });
         config.preload.textures.push({ id:'assets/textures/swirl.png' });
+        config.preload.textures.push({ id:'assets/textures/heart.png' });
         return config;
     }
 
     override function ready() {
         log('READY');
         untyped document.body.style.backgroundColor = "#efefef";
-        new FPS();
+        // new FPS();
 
         var l = Std.parseInt(app.io.string_load('solved'));
         if (l != null) {
             solvedLevel = l;
         }
-        solvedLevel = 0;
 
         // physics
         Luxe.physics.nape.gravity = new Vec(0, 0);
@@ -69,7 +69,7 @@ class Main extends luxe.Game {
             level.sourceVel.y = item.sourceVel[1];
             var polys : Array<Dynamic> = item.polys;
             for (poly in polys) {
-                level.polys.push(new PolyDef(poly.sides, poly.pos[0], poly.pos[1]));
+                level.polys.push(new PolyDef(poly.sides, poly.r, poly.pos[0], poly.pos[1]));
             }
             LEVELS.push(level);
         }

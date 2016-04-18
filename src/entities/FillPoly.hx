@@ -27,9 +27,8 @@ class FillPoly extends Entity {
     public var dir = 0.5;
     public var fillAmount = 0.0;
     public var fillMultiplier = 0.9;
-    public static var fillRatePerSlime = 0.01;
-    public static var minSlimesBeforeDraining = 10;
-    public static var fillDrainRate = fillRatePerSlime * minSlimesBeforeDraining;
+    public static var fillRatePerSlime = 0.005;
+    public static var fillDrainRate = 0.25;
 
     public var collider : PolygonCollider;
     public var slimes : Array<Slime>;
@@ -86,7 +85,10 @@ class FillPoly extends Entity {
                 containedSlimes++;
             }
         }
-        fillAmount += (fillRatePerSlime * containedSlimes * dt) - (fillDrainRate * dt);
+        fillAmount += fillRatePerSlime * containedSlimes * dt;
+        if (containedSlimes == 0) {
+            fillAmount -= fillDrainRate * dt;
+        }
         fillAmount = Maths.clamp(fillAmount, 0, 1);
 
         outlineOpts.x = pos.x;

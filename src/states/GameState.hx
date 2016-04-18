@@ -22,6 +22,10 @@ class GameState extends SceneState {
     public var levelId = -1;
     public var levelDef : Level;
 
+    public var solved = false;
+
+    public var expText : Text;
+
     public var letters : Array<Text>;
     public var hueRate = -360.0;
     public var hueOffset = 0.0;
@@ -34,6 +38,8 @@ class GameState extends SceneState {
     }
 
     override function onenter<T>(with:T) {
+        solved = false;
+
         slimePool = new SlimePool({
             name: 'SlimePool',
             pos: levelDef.sourcePos,
@@ -86,18 +92,40 @@ class GameState extends SceneState {
         // tutorial
         if (levelId == 1) {
             scene.add(new Text({
-                text : 'tut stuff',
+                text : 'Welcome to Slime Tech!\nGet the slime into\ninto the shapes!',
                 color: new Color().rgb(0x000000),
                 align: TextAlign.center,
                 align_vertical: TextAlign.center,
-                pos : new Vec(Luxe.screen.w/2, 400),
+                pos : new Vec(Luxe.screen.w/2, 330),
                 point_size: 36,
+                depth: 500,
+            }));
+            scene.add(new Text({
+                text : 'click & drag the attractors\nvvvvvv',
+                color: new Color().rgb(0x000000),
+                align: TextAlign.center,
+                align_vertical: TextAlign.center,
+                pos : new Vec(Luxe.screen.w/2, 660),
+                point_size: 24,
                 depth: 500,
             }));
         }
 
+        expText = new Text({
+            text : 'Experiment #' + levelId,
+            color: new Color().rgb(0x000000),
+            align: TextAlign.center,
+            align_vertical: TextAlign.center,
+            pos : new Vec(Luxe.screen.w/2, 10),
+            point_size: 20,
+            depth: 500,
+        });
+        scene.add(expText);
+
         // achieved
-        var lets = ['S','C','I','E','N','C','E',' ','A','C','H','I','E','V','E','D','!'];
+        var lets = (levelId == 10)
+            ? ['G','A','M','E',' ','1','0','0','%',' ','B','E','A','T','E','D','!']
+            : ['S','C','I','E','N','C','E',' ','A','C','H','I','E','V','E','D','!'];
         letters = new Array<Text>();
         for (i in 0...lets.length) {
             var letter = lets[i];
@@ -106,7 +134,7 @@ class GameState extends SceneState {
                 color: new ColorHSV(i*40, 0.75, 1, 1),
                 align: TextAlign.center,
                 align_vertical: TextAlign.center,
-                pos : new Vec(i*35 + 75, 770),
+                pos : new Vec(i*35 + 75, 740),
                 point_size: 52,
                 depth: 500,
             });
@@ -121,7 +149,7 @@ class GameState extends SceneState {
                 name: 'poly' + fillPolys.length,
                 pos: poly.pos,
             }, {
-                r: 86,
+                r: poly.r,
                 sides: poly.sides,
                 color: new Color().rgb(0xff9d1e),
                 depth: -99,
@@ -141,13 +169,17 @@ class GameState extends SceneState {
 
         var anyUnsolved = false;
         for (poly in fillPolys) {
-            if (Main.solvedLevel >= levelId) {
+            if (solved) {
                 poly.fillAmount = 1;
             }
             anyUnsolved = anyUnsolved || (poly.fillAmount < 1);
         }
         if (!anyUnsolved) {
+            solved = true;
             Main.solvedLevel = levelId > Main.solvedLevel ? levelId : Main.solvedLevel;
+        }
+
+        if (solved) {
             for (slime in slimePool.slimes) {
                 slime.isRainbow = true;
             }
@@ -155,11 +187,11 @@ class GameState extends SceneState {
             for (i in 0 ... letters.length) {
                 var hue = (i*40 + hueOffset) % 360;
                 letters[i].color = new ColorHSV(hue, 0.75, 1, 1);
-            }
+            }            
         } else {
             for (i in 0 ... letters.length) {
                 letters[i].color.a = 0;
-            }
+            }            
         }
     }
 }
