@@ -145,12 +145,6 @@ class Main extends luxe.Game {
         });
     }
 
-    override function onkeyup(e:KeyEvent) {
-        if(e.keycode == Key.escape) {
-            Luxe.shutdown();
-        }
-    }
-
     override function update(dt:Float) {
         if (gridCalcFrame) {
             for (x in 0 ... grid.length) {
