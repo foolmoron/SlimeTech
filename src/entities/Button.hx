@@ -57,19 +57,31 @@ class Button extends Entity {
         return dx < rectX/2 && dy < rectY/2;
     }
 
-    override function onmousedown(e:MouseEvent) {
-        if (contains(e.x, e.y)) {
+    public function ondown(x:Float, y:Float) {
+        if (contains(x, y)) {
             down = true;
-        }
+        }        
     }
 
-    override function onmouseup(e:MouseEvent) {
-        if (down && !disabled && contains(e.x, e.y)) {
+    public function onup(x:Float, y:Float) {
+        if (down && !disabled && contains(x, y)) {
             onClick();
         }
-        down = false;
+        down = false;        
     }
 
+    override function onmousedown(e:MouseEvent) {
+        ondown(e.x, e.y);
+    }
+    override function onmouseup(e:MouseEvent) {
+        onup(e.x, e.y);
+    }
+    override function ontouchdown(e:TouchEvent) {
+        ondown(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+    }
+    override function ontouchup(e:TouchEvent) {
+        onup(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+    }
     override function update(dt:Float) {
         upSprite.color.a = !down && !disabled ? 1 : 0;
         downSprite.color.a = down && !disabled ? 1 : 0;
