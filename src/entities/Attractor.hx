@@ -15,7 +15,7 @@ import components.*;
 
 class Attractor extends Entity {
 
-    public var disableOutsideRect = { tlx: 30, tly: 54, brx: Luxe.screen.w - 30, bry: 694 };
+    public var disableOutsideRect = { tlx: 30, tly: 54, brx: Luxe.camera.size.x - 30, bry: 694 };
     public function enabled() {
         return pos.x >= disableOutsideRect.tlx && pos.x <= disableOutsideRect.brx && pos.y >= disableOutsideRect.tly && pos.y <= disableOutsideRect.bry;
     }
@@ -36,8 +36,8 @@ class Attractor extends Entity {
         var boundToArea = new BoundToArea({name: 'boundToArea'});
         boundToArea.tlx = 0;
         boundToArea.tly = 0;
-        boundToArea.brx = Luxe.screen.w;
-        boundToArea.bry = Luxe.screen.h;
+        boundToArea.brx = Luxe.camera.size.x;
+        boundToArea.bry = Luxe.camera.size.y;
         boundToArea.rectX = 32;
         boundToArea.rectY = 32;
         add(boundToArea);

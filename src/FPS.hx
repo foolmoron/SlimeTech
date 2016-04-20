@@ -10,7 +10,7 @@ class FPS extends Text {
         def(_options.name, "fps");
         def(_options.depth, 10000);
         def(_options.color, new Color().rgb(0x000000));
-        def(_options.pos, new Vector(Luxe.screen.w - 5, 5));
+        def(_options.pos, new Vector(Luxe.camera.size.x - 5, 5));
         def(_options.point_size, 14);
         def(_options.align, TextAlign.right);
 

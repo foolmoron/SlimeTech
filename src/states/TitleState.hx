@@ -18,7 +18,7 @@ class TitleState extends SceneState {
             color: new Color().rgb(0x000000),
             align: TextAlign.center,
             align_vertical: TextAlign.center,
-            pos : new Vec(Luxe.screen.w/2, 300),
+            pos : new Vec(Luxe.camera.size.x/2, 300),
             point_size: 84,
             depth: 500,
         }));
@@ -27,7 +27,7 @@ class TitleState extends SceneState {
             color: new Color().rgb(0x000000),
             align: TextAlign.center,
             align_vertical: TextAlign.center,
-            pos : new Vec(Luxe.screen.w/2, 430),
+            pos : new Vec(Luxe.camera.size.x/2, 430),
             point_size: 24,
             depth: 500,
         }));
@@ -36,14 +36,14 @@ class TitleState extends SceneState {
             color: new Color().rgb(0x000000),
             align: TextAlign.center,
             align_vertical: TextAlign.center,
-            pos : new Vec(Luxe.screen.w/2, 740),
+            pos : new Vec(Luxe.camera.size.x/2, 740),
             point_size: 48,
             depth: 500,
         }));
         scene.add(new Sprite({
             name: 'heart',
             texture: Main.tex('heart'),
-            pos: new Vec(Luxe.screen.w/2, 490),
+            pos: new Vec(Luxe.camera.size.x/2, 490),
             size: new Vec(446, 60),
             depth: -90,
         }));

@@ -2,6 +2,7 @@ import luxe.Input;
 import luxe.Sprite;
 import luxe.Color;
 import luxe.States;
+import luxe.Camera;
 import luxe.Vector;
 import luxe.Ev;
 import luxe.Log.*;
@@ -47,6 +48,8 @@ class Main extends luxe.Game {
     }
 
     override function ready() {
+        Luxe.camera.size_mode = SizeMode.fit;
+        Luxe.camera.size = new Vec(700, 800);
         log('READY');
         untyped document.body.style.backgroundColor = "#efefef";
         // new FPS();
@@ -76,42 +79,42 @@ class Main extends luxe.Game {
 
         // border physics
         var border = new Body(BodyType.STATIC);
-        border.shapes.add(new Polygon(Polygon.rect(0, 54, Luxe.screen.w, -200)));
-        border.shapes.add(new Polygon(Polygon.rect(0, Luxe.screen.h - 106, Luxe.screen.w, 200)));
-        border.shapes.add(new Polygon(Polygon.rect(30, 0, -200, Luxe.screen.h)));
-        border.shapes.add(new Polygon(Polygon.rect(Luxe.screen.w - 30, 0, 200, Luxe.screen.h)));
+        border.shapes.add(new Polygon(Polygon.rect(0, 54, Luxe.camera.size.x, -200)));
+        border.shapes.add(new Polygon(Polygon.rect(0, Luxe.camera.size.y - 106, Luxe.camera.size.x, 200)));
+        border.shapes.add(new Polygon(Polygon.rect(30, 0, -200, Luxe.camera.size.y)));
+        border.shapes.add(new Polygon(Polygon.rect(Luxe.camera.size.x - 30, 0, 200, Luxe.camera.size.y)));
         border.space = Luxe.physics.nape.space;
 
         // stuff
         var gridsquare = new Sprite({
             name: 'gridsquare',
             color: new Color().rgb(0xe9e9e9),
-            pos: Luxe.screen.mid + squareOffset,
+            pos: Luxe.camera.center + squareOffset,
             size: new Vec(squareSize, squareSize),
             depth: -100,
         });
         var bgthing = new Sprite({
             name: 'bgthing',
             texture: tex('bgthing'),
-            pos: Luxe.screen.mid,
-            size: Luxe.screen.size,
+            pos: Luxe.camera.center,
+            size: Luxe.camera.size,
             depth: -90,
         });
         var fg = new Sprite({
             name: 'fg',
             texture: tex('fg'),
-            pos: Luxe.screen.mid,
-            size: Luxe.screen.size,
+            pos: Luxe.camera.center,
+            size: Luxe.camera.size,
             depth: 100,
         });
 
         // grid lines
-        var xgrid = Math.floor(Luxe.screen.size.x / gridSize);
-        var ygrid = Math.floor(Luxe.screen.size.y / gridSize);
+        var xgrid = Math.floor(Luxe.camera.size.x / gridSize);
+        var ygrid = Math.floor(Luxe.camera.size.y / gridSize);
         for (x in 1 ... xgrid-1) {
             Luxe.draw.line({
                 p0: new Vec(x * gridSize + 30, 54),
-                p1: new Vec(x * gridSize + 30, Luxe.screen.size.y),
+                p1: new Vec(x * gridSize + 30, Luxe.camera.size.y),
                 color: new Color().rgb(0xb8b8b8),
                 depth: -95,
             });
@@ -119,7 +122,7 @@ class Main extends luxe.Game {
         for (y in 1 ... ygrid-1) {
             Luxe.draw.line({
                 p0: new Vec(30, y * gridSize + 54),
-                p1: new Vec(Luxe.screen.size.x, y * gridSize + 54),
+                p1: new Vec(Luxe.camera.size.x, y * gridSize + 54),
                 color: new Color().rgb(0xb8b8b8),
                 depth: -95,
             });

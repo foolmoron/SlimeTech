@@ -62,7 +62,6 @@ class Button extends Entity {
             down = true;
         }        
     }
-
     public function onup(x:Float, y:Float) {
         if (down && !disabled && contains(x, y)) {
             onClick();
@@ -77,11 +76,12 @@ class Button extends Entity {
         onup(e.x, e.y);
     }
     override function ontouchdown(e:TouchEvent) {
-        ondown(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+        ondown(e.x * Luxe.camera.size.x, e.y * Luxe.camera.size.y);
     }
     override function ontouchup(e:TouchEvent) {
-        onup(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+        onup(e.x * Luxe.camera.size.x, e.y * Luxe.camera.size.y);
     }
+
     override function update(dt:Float) {
         upSprite.color.a = !down && !disabled ? 1 : 0;
         downSprite.color.a = down && !disabled ? 1 : 0;

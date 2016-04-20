@@ -49,21 +49,21 @@ class GameState extends SceneState {
 
         var attractor1 = new Attractor({
             name: 'Attractor.' + Luxe.utils.uniqueid(),
-            pos: new Vec(Luxe.screen.w/2 - 50, 725),
+            pos: new Vec(Luxe.camera.size.x/2 - 50, 725),
         });
         attractor1.targets = slimePool.slimeColliders;
         scene.add(attractor1);
 
         var attractor2 = new Attractor({
             name: 'Attractor.' + Luxe.utils.uniqueid(),
-            pos: new Vec(Luxe.screen.w/2 + 0, 725),
+            pos: new Vec(Luxe.camera.size.x/2 + 0, 725),
         });
         attractor2.targets = slimePool.slimeColliders;
         scene.add(attractor2);
 
         var attractor3 = new Attractor({
             name: 'Attractor.' + Luxe.utils.uniqueid(),
-            pos: new Vec(Luxe.screen.w/2 + 50, 725),
+            pos: new Vec(Luxe.camera.size.x/2 + 50, 725),
         });
         attractor3.targets = slimePool.slimeColliders;
         scene.add(attractor3);
@@ -71,7 +71,7 @@ class GameState extends SceneState {
         if (levelId > 1) {
             buttonLeft = new Button({
                 name: 'buttonLeft',
-                pos: new Vec(30, Luxe.screen.h - 52),
+                pos: new Vec(30, Luxe.camera.size.y - 52),
             });
             buttonLeft.onClick = function() { Main.state.set('game' + (levelId - 1)); };
             scene.add(buttonLeft);
@@ -80,7 +80,7 @@ class GameState extends SceneState {
         if (levelId < Main.LEVELS.length) {
             buttonRight = new Button({
                 name: 'buttonRight',
-                pos: new Vec(Luxe.screen.w - 30, Luxe.screen.h - 52),
+                pos: new Vec(Luxe.camera.size.x - 30, Luxe.camera.size.y - 52),
             });
             buttonRight.upSprite.flipx = true;
             buttonRight.downSprite.flipx = true;
@@ -96,7 +96,7 @@ class GameState extends SceneState {
                 color: new Color().rgb(0x000000),
                 align: TextAlign.center,
                 align_vertical: TextAlign.center,
-                pos : new Vec(Luxe.screen.w/2, 330),
+                pos : new Vec(Luxe.camera.size.x/2, 330),
                 point_size: 36,
                 depth: 500,
             }));
@@ -105,7 +105,7 @@ class GameState extends SceneState {
                 color: new Color().rgb(0x000000),
                 align: TextAlign.center,
                 align_vertical: TextAlign.center,
-                pos : new Vec(Luxe.screen.w/2, 660),
+                pos : new Vec(Luxe.camera.size.x/2, 660),
                 point_size: 24,
                 depth: 500,
             }));
@@ -116,7 +116,7 @@ class GameState extends SceneState {
             color: new Color().rgb(0x000000),
             align: TextAlign.center,
             align_vertical: TextAlign.center,
-            pos : new Vec(Luxe.screen.w/2, 10),
+            pos : new Vec(Luxe.camera.size.x/2, 10),
             point_size: 20,
             depth: 500,
         });

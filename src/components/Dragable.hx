@@ -32,7 +32,6 @@ class Dragable extends Component {
             prevMousePos = new Vec(x, y);
         }        
     }
-
     public function onmove(x:Float, y:Float) {
         if (dragging) {
             if (napeBody != null) {
@@ -45,7 +44,6 @@ class Dragable extends Component {
             prevMousePos = new Vec(x, y);
         }
     }
-
     public function onup() {
         dragging = false;
         
@@ -62,10 +60,10 @@ class Dragable extends Component {
     }
 
     override function ontouchdown(e:TouchEvent) {
-        ondown(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+        ondown(e.x * Luxe.camera.size.x, e.y * Luxe.camera.size.y);
     }
     override function ontouchmove(e:TouchEvent) {
-        onmove(e.x * Luxe.screen.w, e.y * Luxe.screen.h);
+        onmove(e.x * Luxe.camera.size.x, e.y * Luxe.camera.size.y);
     }
     override function ontouchup(e:TouchEvent) {
         onup();
